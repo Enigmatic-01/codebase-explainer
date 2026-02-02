@@ -5,7 +5,7 @@ from routes.auth import auth
 app = Flask(__name__)
 from extensions import github
 from config.config_app import AppConfig
-
+from routes.dash import dash
 
 
 app.config.from_object(AppConfig)
@@ -13,14 +13,7 @@ app.config.from_object(AppConfig)
 
 github.init_app(app)
 app.register_blueprint(auth)
-@app.route('/index')
-def index():
-    if 'github_oauth_token' in session:
-        user = github.get('user')
-        print(user)
-        return f'Logged in as {user["login"]}. <a href="/logout">Logout</a>'
-    return 'Not logged in. <a href="/login">Login with GitHub</a>'
-
+app.register_blueprint(dash)
 
 if __name__ == '__main__':
     app.run(debug=True)

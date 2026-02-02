@@ -11,7 +11,7 @@ def login():
 @auth.route('/github-callback')
 @github.authorized_handler
 def authorized(oauth_token):
-    next_url = request.args.get('next') or url_for('index')
+    next_url = request.args.get('next') or '/index'
 
     if oauth_token is None:
         flash("Authentication failed.")
@@ -29,4 +29,4 @@ def get_github_oauth_token():
 @auth.route('/logout')
 def logout():
     session.pop('github_oauth_token', None)
-    return redirect(url_for('index'))
+    return redirect('/index')
