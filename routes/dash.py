@@ -1,4 +1,4 @@
-from flask import Blueprint,session
+from flask import Blueprint,session,render_template
 from extensions import github
 dash = Blueprint(import_name=__name__,name="dash")
 
@@ -7,5 +7,5 @@ def index():
     if 'github_oauth_token' in session:
         user = github.get('user')
         print(user)
-        return f'Logged in as {user["login"]}. <a href="/logout">Logout</a>'
-    return 'Not logged in. <a href="/login">Login with GitHub</a>'
+        return render_template("dash.html")
+    return render_template("dash.html")
