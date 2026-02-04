@@ -3,7 +3,7 @@ from flask import session
 from rag.clean import clean_docs
 from dotenv import load_dotenv
 import os
-from routes.rag import set_repo_config,get_data
+
 load_dotenv()
 
 def fetch_repo(data):

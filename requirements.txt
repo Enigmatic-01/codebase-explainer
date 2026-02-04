@@ -8,3 +8,5 @@ langchain-chroma
 langchain_openai
 duckduckgo-search
 ddgs
+gunicorn
+gevent

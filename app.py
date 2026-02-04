@@ -1,19 +1,21 @@
-from flask import Flask, redirect, url_for, flash,session
-from flask_github import GitHub
-from flask import request
+from flask import Flask
 from routes.auth import auth
-app = Flask(__name__)
+from routes.dash import dash
+from routes.rag import rag
+from routes.chat import chat
 from extensions import github
 from config.config_app import AppConfig
-from routes.dash import dash
 
+def create_app():
+    app = Flask(__name__)
 
-app.config.from_object(AppConfig)
+    app.config.from_object(AppConfig)
 
+    github.init_app(app)
 
-github.init_app(app)
-app.register_blueprint(auth)
-app.register_blueprint(dash)
+    app.register_blueprint(auth)
+    app.register_blueprint(dash)
+    app.register_blueprint(rag)
+    app.register_blueprint(chat)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    return app

@@ -86,7 +86,7 @@ let activeChatId = null;
 
 /* ---------------- API ---------------- */
 async function api(path, options = {}) {
-  const res = await fetch(path, {
+const res = await fetch(path, {
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
     ...options
