@@ -1,0 +1,13 @@
+from uuid import uuid4
+from rag.rag_vector_store import get_vector_store_for_user
+
+def embedd_repo(data):
+    vectorstore=  get_vector_store_for_user(data["chat_id"])
+    uuids = [str(uuid4()) for _ in range(len(data["documents"]))]
+    try:
+        vectorstore.add_documents(documents=data["documents"], ids=uuids)
+        return {"status":"successfull"}
+    except Exception as e:
+        return {"status":e}
+        
+        
