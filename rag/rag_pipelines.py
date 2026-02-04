@@ -11,7 +11,7 @@ from rag.rag_tools import web_search
 # result =  embed_pipeline.invoke({"repo":"Enigmatic-01/Rag-Service-Api","branch":"main","user_id":"12345"})
 
 
-def embed_repo(data):
+def embedd_data(data):
     embed_pipeline = RunnableLambda(fetch_data)|RunnableLambda(clean_docs)|RunnableLambda(embedd_repo)
     return embed_pipeline.invoke(data)
     
