@@ -21,6 +21,7 @@ def get_vectorstore_for_user(user_id: str):
         collection_name=user_id,
         embedding_function=embeddings,
     )
+   
 
     
     return vectorstore

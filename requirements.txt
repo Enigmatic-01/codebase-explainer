@@ -6,3 +6,5 @@ langchain_community
 langchain_classic
 langchain-chroma
 langchain_openai
+duckduckgo-search
+ddgs
