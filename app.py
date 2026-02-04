@@ -1,10 +1,10 @@
 from flask import Flask
-from routes.auth import auth
-from routes.dash import dash
-from routes.rag import rag
-from routes.chat import chat
+from routes.routes_auth import auth
+from routes.routes_dash import dash
+from routes.routes_rag import rag
+from routes.routes_chat import chat
 from extensions import github
-from config.config_app import AppConfig
+from config.app_config import AppConfig
 
 def create_app():
     app = Flask(__name__)

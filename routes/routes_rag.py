@@ -1,5 +1,5 @@
 from flask import Flask, request, Response, jsonify,Blueprint
-from rag.pipelines import query_result
+from rag.rag_pipelines import query_result
 rag = Blueprint(import_name=__name__,name="rag")
 
 

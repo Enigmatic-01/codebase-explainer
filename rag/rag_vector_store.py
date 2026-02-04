@@ -1,13 +1,13 @@
 from langchain_chroma import Chroma
-from rag.models import embedding_model as embeddings
+from rag.rag_models import embedding_model as embeddings
 from dotenv import load_dotenv
 
-from config.config_chroma_db import chroma_client
+from config.chroma_config import chroma_client
 
 load_dotenv()
 
 
-def get_vectorstore_for_user(user_id: str):
+def get_vector_store_for_user(user_id: str):
     """
     Create or load a Chroma vectorstore for a specific user.
     This runs ONLY when user_id is available.

@@ -1,19 +1,18 @@
-from rag.fetch import fetch_repo
-from rag.clean import clean_docs
-from rag.embbed import emmbed_repo
+from rag.rag_data_fetchers import fetch_data
+from rag.rag_text_cleaner import clean_docs
+from rag.rag_embeddig import embedd_repo
 from langchain_core.runnables import RunnableLambda
-from rag.retiver import get_semantic_search
-from rag.models import  get_llm
-from rag.prompt import prompt as raw_prompt
-from langchain_core.output_parsers import StrOutputParser
+from rag.rag_retrievers import get_semantic_search
+from rag.rag_models import  get_llm
+from rag.rag_prompts import prompt as raw_prompt
 from langchain_core.messages import ToolMessage
-from rag.tools import web_search
+from rag.rag_tools import web_search
 
 # result =  embed_pipeline.invoke({"repo":"Enigmatic-01/Rag-Service-Api","branch":"main","user_id":"12345"})
 
 
 def embed_repo(data):
-    embed_pipeline = RunnableLambda(fetch_repo)|RunnableLambda(clean_docs)|RunnableLambda(emmbed_repo)
+    embed_pipeline = RunnableLambda(fetch_data)|RunnableLambda(clean_docs)|RunnableLambda(embedd_repo)
     return embed_pipeline.invoke(data)
     
 

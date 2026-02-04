@@ -1,12 +1,12 @@
 from langchain_community.document_loaders import GithubFileLoader
 from flask import session
-from rag.clean import clean_docs
+from rag.rag_text_cleaner import clean_docs
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-def fetch_repo(data):
+def fetch_data(data):
     repo = data["repo"]
     branch = data["branch"]
     
