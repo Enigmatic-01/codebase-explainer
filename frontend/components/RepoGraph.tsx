@@ -9,27 +9,31 @@ interface RepoGraphProps {
 }
 
 const RepoGraph: React.FC<RepoGraphProps> = ({ structure, onClose }) => {
+  
   const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     if (!svgRef.current) return;
-
+  if (!structure || !structure.name) return;
     // Flatten tree structure for D3
     const nodes: GraphNode[] = [];
     const links: GraphLink[] = [];
 
-    const traverse = (node: RepoNode, parentId?: string) => {
-      const id = `${parentId ? parentId + '/' : ''}${node.name}`;
-      nodes.push({ id, name: node.name, type: node.type });
-      
-      if (parentId) {
-        links.push({ source: parentId, target: id });
-      }
+    const traverse = (node?: RepoNode, parentId?: string) => {
+  if (!node || !node.name) return; // ✅ SAFE GUARD
 
-      if (node.children) {
-        node.children.forEach(child => traverse(child, id));
-      }
-    };
+  const id = `${parentId ? parentId + '/' : ''}${node.name}`;
+  nodes.push({ id, name: node.name, type: node.type });
+
+  if (parentId) {
+    links.push({ source: parentId, target: id });
+  }
+
+  if (Array.isArray(node.children)) {
+    node.children.forEach(child => traverse(child, id));
+  }
+};
+
 
     traverse(structure);
 
@@ -115,7 +119,7 @@ const RepoGraph: React.FC<RepoGraphProps> = ({ structure, onClose }) => {
   }, [structure]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-999 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="relative w-full h-full max-w-6xl max-h-[90vh] bg-white dark:bg-gray-900 rounded-2xl border dark:border-gray-800 shadow-2xl overflow-hidden flex flex-col">
         <div className="flex items-center justify-between px-6 py-4 border-b dark:border-gray-800">
           <h3 className="font-semibold text-lg flex items-center gap-2">

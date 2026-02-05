@@ -2,7 +2,8 @@ from flask import request, Response, jsonify, Blueprint
 from rag.rag_pipelines import query_result
 from config.supabase_config import supabase
 
-rag = Blueprint(import_name=__name__, name="rag")
+rag = Blueprint("rag", __name__, url_prefix="/repotalks/rag")
+
 
 
 @rag.route("/query", methods=["POST"])
@@ -49,13 +50,14 @@ def query_stream():
         .eq("chat_id", chat_id) \
         .order("created_at", desc=False) \
         .execute()
+    history = history_res.data
+    user_messages = [m for m in history if m["role"] == "user"]
+    query = user_messages[-1]["content"] if user_messages else ""
 
-    history = [
-    ]
 
     
     user_messages = [m for m in history if m["role"] == "user"]
-    query = user_messages[-1]["text"] if user_messages else ""
+    query = user_messages[-1]["content"] if user_messages else ""
     print("query_result called with:", query)
 
     def event_stream():

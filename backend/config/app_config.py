@@ -6,3 +6,8 @@ class AppConfig:
     GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
     GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
     GITHUB_CALLBACK_URL = os.getenv("GITHUB_CALLBACK_URL")
+    
+    SESSION_COOKIE_SAMESITE="lax"
+    SESSION_COOKIE_SECURE=False# True only in HTTPS production
+    SESSION_COOKIE_HTTPONLY=True
+   

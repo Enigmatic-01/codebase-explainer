@@ -1,6 +1,6 @@
 from flask import Blueprint,session,render_template
 from extensions import github
-dash = Blueprint(import_name=__name__,name="dash")
+dash = Blueprint(import_name=__name__,name="/repotalks/dash",)
 
 @dash.route('/index')
 def index():

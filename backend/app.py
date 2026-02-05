@@ -5,6 +5,9 @@ from routes.routes_rag import rag
 from routes.routes_chat import chat
 from extensions import github
 from config.app_config import AppConfig
+from flask_cors import CORS # type: ignore
+
+
 
 def create_app():
     app = Flask(__name__)
@@ -12,7 +15,11 @@ def create_app():
     app.config.from_object(AppConfig)
 
     github.init_app(app)
-
+    CORS(
+    app,
+    supports_credentials=True,
+    origins=["http://localhost:3000"]
+)
     app.register_blueprint(auth)
     app.register_blueprint(dash)
     app.register_blueprint(rag)

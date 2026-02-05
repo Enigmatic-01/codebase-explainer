@@ -1,11 +1,14 @@
+import os
 from flask import Blueprint, request, jsonify, session
 from config.supabase_config import supabase
 from rag.rag_pipelines import embedd_data
 
-chat = Blueprint("chat", __name__, url_prefix="/api/chats")
-
-
 from urllib.parse import urlparse
+
+
+chat = Blueprint("chat", __name__, url_prefix="/repotalks/chats")
+
+
 
 def extract_owner_repo(url: str) -> str:
     """
@@ -95,7 +98,7 @@ def get_chat(chat_id):
 
     messages = (
         supabase.table("message")
-        .select("role, content")
+        .select("role, content,message_id")
         .eq("chat_id", chat_id)
         .order("created_at")
         .execute()
@@ -105,7 +108,7 @@ def get_chat(chat_id):
         "id": chat["chat_id"],
         "url": chat["url"],
         "messages": [
-            {"role": m["role"], "text": m["content"]}
+            {"role": m["role"], "text": m["content"],"msg_id":m["message_id"]}
             for m in messages
         ]
     })

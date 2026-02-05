@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 export type Role = 'user' | 'model';
 
 export interface Message {
-  id: string;
+  msg_id: string;
   role: Role;
   text: string;
   timestamp: number;
@@ -20,8 +20,8 @@ export interface ChatSession {
 }
 
 export interface RepoNode {
-  name: string;
-  type: 'file' | 'directory';
+   name: string;
+  type: 'directory' | 'file';
   children?: RepoNode[];
 }
 
@@ -29,7 +29,8 @@ export interface RepoNode {
 export interface GraphNode extends d3.SimulationNodeDatum {
   id: string;
   name: string;
-  type: 'file' | 'directory';
+  type: 'directory' | 'file';
+
 }
 
 // Fixed: Added d3 import above to satisfy the namespace requirement
@@ -37,3 +38,4 @@ export interface GraphLink extends d3.SimulationLinkDatum<GraphNode> {
   source: string;
   target: string;
 }
+

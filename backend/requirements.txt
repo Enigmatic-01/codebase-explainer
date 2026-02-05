@@ -11,3 +11,4 @@ ddgs
 gunicorn
 gevent
 supabase
+flask-cors

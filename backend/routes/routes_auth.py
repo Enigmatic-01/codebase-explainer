@@ -1,8 +1,13 @@
-from flask import redirect, flash, session, Blueprint, request
+import os
+from flask import redirect, flash, session, Blueprint, request,jsonify
 from extensions import github
 from config.supabase_config import supabase
+from dotenv import load_dotenv
+load_dotenv()
 
-auth = Blueprint("auth", __name__)
+
+FRONTEND_URL = os.getenv("FRONT_API")
+auth = Blueprint("auth", __name__,url_prefix="/repotalks/auth")
 
 
 @auth.route('/login')
@@ -13,7 +18,9 @@ def login():
 @auth.route('/github-callback')
 @github.authorized_handler
 def authorized(oauth_token):
-    next_url = request.args.get('next') or '/index'
+    
+
+    next_url = request.args.get('next') or FRONTEND_URL
 
     if oauth_token is None:
         flash("Authentication failed.")
@@ -55,8 +62,16 @@ def get_github_oauth_token():
     
     return session.get('github_oauth_token')
 
-
-@auth.route('/logout')
+@auth.route('/logout', methods=["POST"])
 def logout():
     session.clear()
-    return redirect('/index')
+    return {"ok": True}
+
+@auth.route("/me")
+def me():
+    user = session.get("user")
+
+    if not user:
+        return jsonify({}), 401
+
+    return jsonify(user)
