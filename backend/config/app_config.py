@@ -6,8 +6,13 @@ class AppConfig:
     GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
     GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
     GITHUB_CALLBACK_URL = os.getenv("GITHUB_CALLBACK_URL")
-    ENV = os.getenv("FLASK_ENV", "development")
-    SESSION_COOKIE_SAMESITE="lax"
-    SESSION_COOKIE_SECURE=False# True only in HTTPS production
-    SESSION_COOKIE_HTTPONLY=True
-   
+
+ 
+    # ✅ Required for cross-site login on Render
+    SESSION_COOKIE_SAMESITE = "None"
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+
+    # helps behind Render proxy
+    PREFERRED_URL_SCHEME = "https"
+
