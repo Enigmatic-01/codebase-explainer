@@ -7,8 +7,9 @@ services:
     startCommand: gunicorn app:app
     autoDeploy: true
 
-  - type: static
+  - type: web
     name: repotalk-frontend
+    runtime: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
