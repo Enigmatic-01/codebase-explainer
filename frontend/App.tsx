@@ -6,12 +6,13 @@ import ChatArea from './components/ChatArea';
 import EmptyState from './components/EmptyState';
 import NewChatModal from './components/NewChatModal';
 import RepoGraph from './components/RepoGraph';
+import { buildTreeFromFlat } from "./treeBuilder";
 
 const BACK_API = import.meta.env.VITE_BACK_API
 const App: React.FC = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [isChatLoading, setIsChatLoading] = useState(false);
-
+  const [isTreeLoading, setIsTreeLoading] = useState(false);
   const [newRepoUrl, setNewRepoUrl] = useState('');
   const [newRepoBranch, setNewRepoBranch] = useState('main');
   const [chats, setChats] = useState<ChatSession[]>([]);
@@ -24,21 +25,48 @@ const App: React.FC = () => {
   const [isAuth, setIsAuth] = useState(false);
 
   const activeChat = chats.find(c => c.id === activeChatId);
-  const mockStructure: RepoNode = {
-  name: 'repo',
-  type: 'directory',
-  children: [
-    {
-      name: 'src',
-      type: 'directory',
-      children: [
-        { name: 'App.tsx', type: 'file' },
-        { name: 'index.tsx', type: 'file' },
-      ],
-    },
-    { name: 'package.json', type: 'file' },
-    { name: 'README.md', type: 'file' },
-  ],
+const handleVisualize = async () => {
+  if (!activeChatId) return;
+
+  const chat = chats.find(c => c.id === activeChatId);
+  if (!chat) return;
+
+  if (chat.structure) {
+    setIsGraphOpen(true);
+    return;
+  }
+
+  const structure = await fetchTree(activeChatId);
+  if (!structure) return;
+
+  setChats(prev =>
+    prev.map(c =>
+      c.id === activeChatId
+        ? { ...c, structure }
+        : c
+    )
+  );
+
+  setIsGraphOpen(true);
+};
+
+
+
+const fetchTree = async (chatId: string) => {
+  try {
+    const res = await fetch(`${BACK_API}/chats/${chatId}/tree`, {
+      credentials: "include",
+    });
+
+    if (!res.ok) throw new Error("Tree fetch failed");
+
+    const data = await res.json();
+
+    return buildTreeFromFlat(data.structure);
+  } catch (err) {
+    console.error("Tree error:", err);
+    return undefined;
+  }
 };
 
 const handleCreateChat =async  () => {
@@ -69,14 +97,15 @@ const handleCreateChat =async  () => {
 
     const chat = await res.json();
 
-    const newChat: ChatSession = {
-      id: chat.id,
-      title: chat.title,
-      url: chat.url,
-      branch: newRepoBranch,
-      messages: [],
-      structure: mockStructure,
-    };
+    
+const newChat: ChatSession = {
+  id: chat.id,
+  title: chat.title,
+  url: chat.url,
+  branch: newRepoBranch,
+  messages: [],
+};
+
 
     setChats(prev => [newChat, ...prev]);
     setActiveChatId(newChat.id);
@@ -147,13 +176,20 @@ useEffect(() => {
       if (res.status === 401) return;
 
       const data = await res.json();
+      const normalizedChats: ChatSession[] = data.map((chat: any) => ({
+  id: chat.id,
+  title: chat.title,
+  url: chat.url,
+  branch: chat.branch ?? "main",
+  messages: [],
+}));
 
-    const chatsWithStructure = data.map((chat: ChatSession) => ({
-      ...chat,
-      structure: chat.structure ?? mockStructure,
-    }));
+setChats(normalizedChats);
 
-    setChats(chatsWithStructure);
+   
+
+
+  
     } catch (err) {
       console.error("Failed to load chats:", err);
     }
@@ -196,7 +232,8 @@ if (authLoading) {
           activeChat={activeChat}
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
-          setIsGraphOpen={setIsGraphOpen}
+          
+          onVisualize={handleVisualize}
         />
 {activeChat && userId ? (
   <ChatArea
@@ -228,12 +265,19 @@ if (authLoading) {
 
       )}
 
-   {isGraphOpen && activeChat?.structure && (
+  {isTreeLoading && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black/40">
+    Loading repo graph...
+  </div>
+)}
+
+{isGraphOpen && activeChat?.structure && (
   <RepoGraph
     structure={activeChat.structure}
     onClose={() => setIsGraphOpen(false)}
   />
 )}
+
 
     </div>
   );

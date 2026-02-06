@@ -58,7 +58,7 @@ def query_stream():
     
     user_messages = [m for m in history if m["role"] == "user"]
     query = user_messages[-1]["content"] if user_messages else ""
-    print("query_result called with:", query)
+    
 
     def event_stream():
 
@@ -70,7 +70,7 @@ def query_stream():
                 "tool_enabled": False,
                 "chat_id": chat_id
             }):
-                print(chunk.content)
+                
                 if hasattr(chunk, "content") and chunk.content:
                     ai_response += chunk.content
                     yield f"data: {chunk.content}\n\n"

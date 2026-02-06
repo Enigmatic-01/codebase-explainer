@@ -5,14 +5,16 @@ interface Props {
 activeChat?: ChatSession;
 isSidebarOpen: boolean;
 setIsSidebarOpen: (v: boolean) => void;
-setIsGraphOpen: (v: boolean) => void;
+
+onVisualize: () => void;
 }
 
 const Header: React.FC<Props> = ({
 activeChat,
 isSidebarOpen,
 setIsSidebarOpen,
-setIsGraphOpen,
+
+onVisualize
 }) => {
 return ( <header className="h-16 flex items-center justify-between px-4 border-b
                    bg-white dark:bg-gray-900 dark:border-gray-800">
@@ -41,15 +43,25 @@ return ( <header className="h-16 flex items-center justify-between px-4 border-b
     )}
   </div>
   {activeChat && (
-    <button
-      onClick={() => setIsGraphOpen(true)}
-      className="px-3 py-1.5 text-sm font-medium rounded-lg
-                 bg-brand-50 hover:bg-brand-100 dark:bg-brand-900/20 dark:hover:bg-brand-900/40
-                 transition-colors"
-    >
-      Visualize Repo
-    </button>
-  )}
+<button
+onClick={onVisualize}
+className="
+px-2 sm py-1.5
+text-xs sm font-medium
+rounded-lg
+bg-brand-600 hover
+text-white
+transition-colors
+whitespace-nowrap
+shrink-0
+border-2
+border-amber-50
+">
+Visualize
+
+  </button>
+)}
+
 </header>
 
 );
