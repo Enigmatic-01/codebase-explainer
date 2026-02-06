@@ -1,6 +1,6 @@
 <h1>Codebase Explainer / RepoTalks</h1>
 
-<img src="./frontend/assets/project-screenshot.png" alt="Project Screenshot" width="600">
+<img src="https://photos.app.goo.gl/gMhaLpGNNyBNxCqm9" alt="Project Screenshot" width="600">
 
 <p><strong>Codebase Explainer</strong> (also called <strong>RepoTalks</strong>) is a full-stack monorepo web application that allows users to:</p>
 
