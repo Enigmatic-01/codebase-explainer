@@ -151,4 +151,4 @@ npm install</code></pre>
 <hr>
 
 <h2>License</h2>
-<p>MIT License © Your Name</p>
+<p>MIT License © Amritpritpal Singh</p>
